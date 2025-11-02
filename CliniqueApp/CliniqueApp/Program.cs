@@ -49,6 +49,7 @@ builder.Services.AddControllers()
 //houssem boucle problem
 
 // -------------------- CORS pour Ionic --------------------
+/*
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowIonicApp",
@@ -60,7 +61,25 @@ builder.Services.AddCors(options =>
                   .AllowCredentials();
         });
 });
+*/
 // -------------------- CORS pour Ionic --------------------
+
+// -------------------- CORS pour React et Ionic --------------------
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontApps",
+        policy =>
+        {
+            policy.WithOrigins(
+                "http://localhost:3000",  // React
+                "http://localhost:8100"   // Ionic
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+        });
+});
+// -------------------- CORS pour React et Ionic --------------------
 
 
 
@@ -80,7 +99,9 @@ var app = builder.Build();
     app.UseSwaggerUI();
 
 
-app.UseCors("AllowIonicApp"); // ? CORS avant Auth
+//app.UseCors("AllowIonicApp"); // ? CORS avant Auth
+app.UseCors("AllowFrontApps");
+
 app.UseAuthentication();
 
 //app.UseHttpsRedirection();
